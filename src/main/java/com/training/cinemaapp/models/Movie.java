@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity(name = "movie")
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 public class Movie {
 
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private int id;
     @Column(name = "title")
