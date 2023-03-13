@@ -1,15 +1,20 @@
 package com.training.cinemaapp.controllers;
 
+import com.training.cinemaapp.exceptions.TokenRefreshException;
 import com.training.cinemaapp.models.ERole;
+import com.training.cinemaapp.models.RefreshToken;
 import com.training.cinemaapp.models.Role;
 import com.training.cinemaapp.models.UserAccount;
 import com.training.cinemaapp.payload.request.LoginRequest;
 import com.training.cinemaapp.payload.request.SignupRequest;
+import com.training.cinemaapp.payload.request.TokenRefreshRequest;
 import com.training.cinemaapp.payload.response.JwtResponse;
 import com.training.cinemaapp.payload.response.MessageResponse;
+import com.training.cinemaapp.payload.response.TokenRefreshResponse;
 import com.training.cinemaapp.repositories.RoleRepository;
 import com.training.cinemaapp.repositories.UserAccountRepository;
 import com.training.cinemaapp.security.jwt.JwtUtils;
+import com.training.cinemaapp.security.services.RefreshTokenService;
 import com.training.cinemaapp.security.services.UserDetailsImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +41,16 @@ import static java.util.Objects.isNull;
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
-
     @Autowired
     UserAccountRepository userAccountRepository;
-
     @Autowired
     RoleRepository roleRepository;
-
     @Autowired
     PasswordEncoder encoder;
-
     @Autowired
     JwtUtils jwtUtils;
+    @Autowired
+    RefreshTokenService refreshTokenService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -62,7 +65,10 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+
         return ResponseEntity.ok(new JwtResponse(jwt,
+                refreshToken.getToken(),
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
@@ -119,9 +125,23 @@ public class AuthController {
         }
 
         user.setRoles(roles);
-//        userAccountRepository.save(new UserAccount(2,"someUser2","mail@mail.com","password",new Timestamp(System.currentTimeMillis()),roles));
         userAccountRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+
+        return refreshTokenService.findByToken(requestRefreshToken)
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+                    return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+                })
+                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
+                        "Refresh token is not in database!"));
     }
 }
