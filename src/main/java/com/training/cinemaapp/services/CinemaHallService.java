@@ -16,4 +16,12 @@ public class CinemaHallService {
     public List<CinemaHall> getCinemaHalls() {
         return cinemaHallRepository.findAll();
     }
+
+    public CinemaHall getCinemaHallById(Integer id) {
+        return cinemaHallRepository.findById(id).orElseThrow(() -> new RuntimeException("Cinema hall not found"));
+    }
+
+    public void addCinemaHall(CinemaHall cinemaHall) {
+        cinemaHallRepository.save(cinemaHall);
+    }
 }

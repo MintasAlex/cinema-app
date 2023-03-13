@@ -2,17 +2,18 @@ package com.training.cinemaapp.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "cinema_hall")
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class CinemaHall {
-
     @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @Column(name = "name")
     private String name;
     @Column(name = "cinema_id")
@@ -20,8 +21,10 @@ public class CinemaHall {
     @Column(name = "capacity")
     private int capacity;
 
-    public CinemaHall() {
+    public CinemaHall(String name, int cinemaId, int capacity) {
+        this.name = name;
+        this.cinemaId = cinemaId;
+        this.capacity = capacity;
     }
-
 
 }

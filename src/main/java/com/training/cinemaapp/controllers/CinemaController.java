@@ -3,6 +3,7 @@ package com.training.cinemaapp.controllers;
 import com.training.cinemaapp.models.Cinema;
 import com.training.cinemaapp.services.CinemaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,9 @@ public class CinemaController {
     }
 
     @PostMapping("/cinemas")
-    public void addCinema(@RequestBody Cinema cinema) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public String addCinema(@RequestBody Cinema cinema) {
         cinemaService.addCinema(cinema);
+        return "Cinema added successfully";
     }
 }

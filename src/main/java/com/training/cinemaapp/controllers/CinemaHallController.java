@@ -3,8 +3,8 @@ package com.training.cinemaapp.controllers;
 import com.training.cinemaapp.models.CinemaHall;
 import com.training.cinemaapp.services.CinemaHallService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +17,18 @@ public class CinemaHallController {
     @GetMapping("/cinema-halls")
     public List<CinemaHall> getCinemaHalls() {
         return cinemaHallService.getCinemaHalls();
+    }
+
+    @GetMapping("/cinema-halls/{id}")
+    public CinemaHall getCinemaHallById(@PathVariable Integer id) {
+        return cinemaHallService.getCinemaHallById(id);
+    }
+
+    @PostMapping("/cinema-halls")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String addCinemaHall(@RequestBody CinemaHall cinemaHall) {
+        cinemaHallService.addCinemaHall(cinemaHall);
+        return "Cinema hall added successfully";
     }
 
 
