@@ -16,4 +16,6 @@ public class UserAccountService {
     public List<UserAccount> getUserAccounts() {
         return userAccountRepository.findAll();
     }
+
+
 }
