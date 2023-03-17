@@ -3,17 +3,14 @@ package com.training.cinemaapp.models;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "movie")
 @Data
 public class Movie {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     @Column(name = "title")
@@ -30,5 +27,23 @@ public class Movie {
     private String picturePath;
 
     public Movie() {
+    }
+
+    public Movie(String title, int runtimeMinutes, String score, String rating, String description) {
+        this.title = title;
+        this.runtimeMinutes = runtimeMinutes;
+        this.score = score;
+        this.rating = rating;
+        this.description = description;
+        this.picturePath = "";
+    }
+
+    public Movie(String title, int runtimeMinutes, String score, String rating, String description, String picturePath) {
+        this.title = title;
+        this.runtimeMinutes = runtimeMinutes;
+        this.score = score;
+        this.rating = rating;
+        this.description = description;
+        this.picturePath = picturePath;
     }
 }

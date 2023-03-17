@@ -12,13 +12,20 @@ import javax.persistence.*;
 public class UserRole {
 
     @Id
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserAccount user;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Id
+    @Column(name = "role_id")
+    private Integer roleId;
+
+
     @ManyToOne(optional = false)
-    @JoinColumn(name = "role_id", nullable = false)
+    @MapsId("userId")
+    private UserAccount user;
+
+    @ManyToOne(optional = false)
+    @MapsId("roleId")
     private Role role;
 
 }

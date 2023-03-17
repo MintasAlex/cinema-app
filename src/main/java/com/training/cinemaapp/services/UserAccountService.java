@@ -17,5 +17,9 @@ public class UserAccountService {
         return userAccountRepository.findAll();
     }
 
+    public UserAccount getUserAccountById(int id) {
+        return userAccountRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
 
 }

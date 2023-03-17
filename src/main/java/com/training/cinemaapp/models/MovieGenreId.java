@@ -6,6 +6,6 @@ import java.io.Serializable;
 
 @Data
 public class MovieGenreId implements Serializable {
-    private Genre genre;
-    private Movie movie;
+    private String genreName;
+    private Integer movieId;
 }

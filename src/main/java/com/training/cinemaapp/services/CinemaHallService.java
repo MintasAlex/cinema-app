@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CinemaHallService {
@@ -17,11 +18,30 @@ public class CinemaHallService {
         return cinemaHallRepository.findAll();
     }
 
-    public CinemaHall getCinemaHallById(Integer id) {
-        return cinemaHallRepository.findById(id).orElseThrow(() -> new RuntimeException("Cinema hall not found"));
+    public Optional<CinemaHall> getCinemaHallById(Integer id) {
+        return cinemaHallRepository.findById(id);
     }
 
-    public void addCinemaHall(CinemaHall cinemaHall) {
-        cinemaHallRepository.save(cinemaHall);
+    public CinemaHall addCinemaHall(CinemaHall cinemaHall) {
+        return cinemaHallRepository.save(cinemaHall);
+    }
+
+    public Optional<CinemaHall> updateCinemaHall(CinemaHall newCinemaHall, Integer id) {
+        return cinemaHallRepository.findById(id)
+                .map(cinemaHall -> {
+                    cinemaHall.setName(newCinemaHall.getName());
+                    cinemaHall.setCapacity(newCinemaHall.getCapacity());
+                    cinemaHallRepository.save(cinemaHall);
+                    return cinemaHall;
+                });
+    }
+
+    public Boolean deleteCinemaHall(Integer id) {
+        if (cinemaHallRepository.existsById(id)) {
+            cinemaHallRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

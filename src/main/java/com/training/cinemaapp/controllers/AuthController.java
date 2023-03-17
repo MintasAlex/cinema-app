@@ -26,14 +26,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.validation.Valid;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.zip.CheckedOutputStream;
-
-import static java.util.Objects.isNull;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

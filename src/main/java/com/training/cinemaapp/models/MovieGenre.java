@@ -12,13 +12,19 @@ import javax.persistence.*;
 public class MovieGenre {
 
     @Id
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "genre_name", nullable = false)
-    private Genre genre;
-    @Id
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "movie_id", nullable = false)
-    private Movie movie;
+    @Column(name = "genre_name", nullable = false)
+    private String genreName;
 
+    @Id
+    @Column(name = "movie_id", nullable = false)
+    private Integer movieId;
+
+    @ManyToOne(optional = false)
+    @MapsId("genreName")
+    private Genre genre;
+
+    @ManyToOne(optional = false)
+    @MapsId("movieId")
+    private Movie movie;
 
 }
