@@ -1,6 +1,5 @@
 package com.training.cinemaapp.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +8,6 @@ import javax.persistence.*;
 @Entity(name = "seat")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Seat {
 
     @Id
@@ -25,4 +23,9 @@ public class Seat {
     @ManyToOne(optional = false)
     @MapsId("cinemaHallId")
     private CinemaHall cinemaHall;
+
+    public Seat(String seatName, Integer cinemaHallId) {
+        this.seatName = seatName;
+        this.cinemaHallId = cinemaHallId;
+    }
 }

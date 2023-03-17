@@ -37,9 +37,9 @@ public class ScreeningService {
     public Optional<Screening> updateScreening(Screening newScreening, int id) {
         return screeningRepository.findById(id)
                 .map(screening -> {
-                    screening.setStartTimestamp(newScreening.getStartTimestamp());
                     screening.setMovieId(newScreening.getMovieId());
                     screening.setCinemaHallId(newScreening.getCinemaHallId());
+                    screening.setStartTimestamp(newScreening.getStartTimestamp());
                     screeningRepository.save(screening);
                     return screening;
                 });
