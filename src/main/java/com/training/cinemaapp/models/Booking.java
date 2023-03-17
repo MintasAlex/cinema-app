@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Entity(name = "booking")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +27,10 @@ public class Booking {
     @ManyToOne
     @MapsId("userId")
     private UserAccount user;
+
+    public Booking(Integer screeningId, Long userId) {
+        this.screeningId = screeningId;
+        this.userId = userId;
+    }
 
 }
