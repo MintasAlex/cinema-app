@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 @Entity(name = "screening")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Screening {
 
     @Id
@@ -33,4 +32,10 @@ public class Screening {
     @ManyToOne(optional = false)
     @MapsId("cinemaHallId")
     private CinemaHall cinemaHall;
+
+    public Screening(Integer movieId, Integer cinemaHallId, Timestamp startTimestamp) {
+        this.movieId = movieId;
+        this.cinemaHallId = cinemaHallId;
+        this.startTimestamp = startTimestamp;
+    }
 }
