@@ -20,16 +20,19 @@ public class UserRoleController {
     private UserRoleService userRoleService;
 
     @GetMapping("/user-roles")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserRole> getUserRoles() {
         return userRoleService.getUserRoles();
     }
 
     @GetMapping("/user-roles/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
     public List<UserRole> getUserRolesByUserId(@PathVariable Long id) {
         return userRoleService.getUserRolesByUserId(id);
     }
 
     @GetMapping("/user-roles/{userId}/{roleId}")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#userId)")
     public ResponseEntity<?> getUserRoleByUserIdAndRoleId(@PathVariable Long userId, @PathVariable int roleId) {
         if (userRoleService.getUserRoleByUserIdAndRoleId(userId, roleId).isPresent()) {
             return ResponseEntity.ok().body(userRoleService.getUserRoleByUserIdAndRoleId(userId, roleId));

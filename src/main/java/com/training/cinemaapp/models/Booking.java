@@ -1,6 +1,5 @@
 package com.training.cinemaapp.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,17 +17,17 @@ public class Booking {
     private Integer screeningId;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private Integer userId;
 
-    @ManyToOne
-    @MapsId("screeningId")
-    private Screening screening;
+//    @ManyToOne
+//    @MapsId("screeningId")
+//    private Screening screening;
+//
+//    @ManyToOne
+//    @MapsId("userId")
+//    private UserAccount user;
 
-    @ManyToOne
-    @MapsId("userId")
-    private UserAccount user;
-
-    public Booking(Integer screeningId, Long userId) {
+    public Booking(Integer screeningId, Integer userId) {
         this.screeningId = screeningId;
         this.userId = userId;
     }

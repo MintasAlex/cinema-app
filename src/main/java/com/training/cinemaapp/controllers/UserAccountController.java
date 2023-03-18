@@ -23,7 +23,7 @@ public class UserAccountController {
     }
 
     @GetMapping("/users/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
     public UserAccount getUserAccountById(@PathVariable int id) {
         return userAccountService.getUserAccountById(id);
     }

@@ -20,12 +20,12 @@ public class UserRole {
     private Integer roleId;
 
 
-    @ManyToOne(optional = false)
-    @MapsId("userId")
-    private UserAccount user;
-
-    @ManyToOne(optional = false)
-    @MapsId("roleId")
-    private Role role;
+//    @ManyToOne(optional = false)
+//    @MapsId("userId")
+//    private UserAccount user;
+//
+//    @ManyToOne(optional = false)
+//    @MapsId("roleId")
+//    private Role role;
 
 }

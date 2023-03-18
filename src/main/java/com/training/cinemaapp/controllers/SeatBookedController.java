@@ -1,6 +1,7 @@
 package com.training.cinemaapp.controllers;
 
 import com.training.cinemaapp.models.SeatBooked;
+import com.training.cinemaapp.security.UserSecurity;
 import com.training.cinemaapp.services.SeatBookedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ public class SeatBookedController {
 
     @Autowired
     private SeatBookedService seatBookedService;
+
+    @Autowired
+    private UserSecurity userSecurity;
 
     @GetMapping("/seatBooked")
     public List<SeatBooked> getSeatsBooked() {
@@ -44,22 +48,30 @@ public class SeatBookedController {
 
     @PostMapping("/seatBooked")
     public ResponseEntity<SeatBooked> addSeatBooked(@Valid @RequestBody SeatBooked seatBooked) {
-        SeatBooked newSeatBooked = seatBookedService.addSeatBooked(seatBooked);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{bookingId}/{seatId}")
-                .buildAndExpand(newSeatBooked.getBookingId(), newSeatBooked.getSeatId())
-                .toUri();
-        return ResponseEntity.created(location).body(newSeatBooked);
+        if (userSecurity.isUserBookingForHimself(seatBooked.getBookingId())) {
+            SeatBooked newSeatBooked = seatBookedService.addSeatBooked(seatBooked);
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{bookingId}/{seatId}")
+                    .buildAndExpand(newSeatBooked.getBookingId(), newSeatBooked.getSeatId())
+                    .toUri();
+            return ResponseEntity.created(location).body(newSeatBooked);
+        } else {
+            return ResponseEntity.status(403).build();
+        }
     }
 
     @DeleteMapping("/seatBooked/{bookingId}/{seatId}")
     @Transactional
     public ResponseEntity<?> deleteSeatBooked(@PathVariable int bookingId, @PathVariable int seatId) {
-        if (seatBookedService.deleteSeatBooked(bookingId, seatId)) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+        if (userSecurity.isUserBookingAuthor(bookingId)){
+            if (seatBookedService.deleteSeatBooked(bookingId, seatId)) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else{
+            return ResponseEntity.status(403).build();
         }
     }
 
