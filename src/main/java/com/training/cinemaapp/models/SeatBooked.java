@@ -21,6 +21,9 @@ public class SeatBooked {
     @Column(name = "seat_id", nullable = false)
     private Integer seatId;
 
+    @Column(name = "screening_id", nullable = false)
+    private Integer screeningId;
+
     @ManyToOne(optional = false)
     @MapsId("bookingId")
     private Booking booking;
@@ -28,6 +31,10 @@ public class SeatBooked {
     @ManyToOne(optional = false)
     @MapsId("seatId")
     private Seat seat;
+
+    @ManyToOne(optional = false)
+    @MapsId("screeningId")
+    private Screening screening;
 
 
 }

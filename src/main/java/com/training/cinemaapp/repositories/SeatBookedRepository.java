@@ -15,6 +15,8 @@ public interface SeatBookedRepository extends JpaRepository<SeatBooked, SeatBook
 
     List<SeatBooked> findBySeatId(int seatId);
 
+    List<SeatBooked> findByScreeningId(int screeningId);
+
     Optional<SeatBooked> findByBookingIdAndSeatId(int bookingId, int seatId);
 
     boolean existsByBookingIdAndSeatId(int bookingId, int seatId);

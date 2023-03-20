@@ -26,6 +26,10 @@ public class SeatBookedService {
         return seatBookedRepository.findBySeatId(seatId);
     }
 
+    public List<SeatBooked> getSeatsBookedByScreeningId(int screeningId) {
+        return seatBookedRepository.findByScreeningId(screeningId);
+    }
+
     public Optional<SeatBooked> getSeatBookedByBookingIdAndSeatId(int bookingId, int seatId) {
         return seatBookedRepository.findByBookingIdAndSeatId(bookingId, seatId);
     }

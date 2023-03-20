@@ -23,7 +23,7 @@ public class ScreeningController {
         return screeningService.getScreenings();
     }
 
-    @GetMapping("/screenings/{movieId}")
+    @GetMapping("/screenings/movie/{movieId}")
     public List<Screening> getScreeningByMovieId(@PathVariable int movieId) {
         return screeningService.getScreeningByMovieId(movieId);
     }

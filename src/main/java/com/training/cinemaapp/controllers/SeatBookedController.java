@@ -37,6 +37,11 @@ public class SeatBookedController {
         return seatBookedService.getSeatsBookedBySeatId(seatId);
     }
 
+    @GetMapping("/seatBooked/screening/{screeningId}")
+    public List<SeatBooked> getSeatsBookedByScreeningId(@PathVariable int screeningId) {
+        return seatBookedService.getSeatsBookedByScreeningId(screeningId);
+    }
+
     @GetMapping("/seatBooked/{bookingId}/{seatId}")
     public ResponseEntity<?> getSeatBookedByBookingIdAndSeatId(@PathVariable int bookingId, @PathVariable int seatId) {
         if (seatBookedService.getSeatBookedByBookingIdAndSeatId(bookingId, seatId).isPresent()) {
@@ -48,7 +53,7 @@ public class SeatBookedController {
 
     @PostMapping("/seatBooked")
     public ResponseEntity<SeatBooked> addSeatBooked(@Valid @RequestBody SeatBooked seatBooked) {
-        if (userSecurity.isUserBookingForHimself(seatBooked.getBookingId())) {
+        if (userSecurity.isUserBookingAuthor(seatBooked.getBookingId())) {
             SeatBooked newSeatBooked = seatBookedService.addSeatBooked(seatBooked);
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
