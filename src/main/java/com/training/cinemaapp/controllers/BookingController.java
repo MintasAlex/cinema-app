@@ -3,6 +3,7 @@ package com.training.cinemaapp.controllers;
 import com.training.cinemaapp.models.Booking;
 import com.training.cinemaapp.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class BookingController {
 
     @GetMapping("/bookings/user/{userId}")
 //    @PreAuthorize("hasRole('ROLE_ADMIN') or @userSecurity.isUserBookingAuthor(authentication.principal.id, #userId)")
-    public List<Booking> getBookingsByUserId(@PathVariable long userId) {
+    public List<Booking> getBookingsByUserId(@PathVariable int userId) {
         return bookingService.getBookingsByUserId(userId);
     }
 
@@ -83,7 +84,7 @@ public class BookingController {
                 return ResponseEntity.notFound().build();
             }
         } else {
-            return ResponseEntity.status(403).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 

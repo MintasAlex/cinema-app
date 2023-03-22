@@ -19,10 +19,10 @@ public class Booking {
     @Column(name = "user_id", nullable = false)
     private Integer userId;
 
-//    @ManyToOne
-//    @MapsId("screeningId")
-//    private Screening screening;
-//
+    @ManyToOne
+    @MapsId("screeningId")
+    private Screening screening;
+
 //    @ManyToOne
 //    @MapsId("userId")
 //    private UserAccount user;

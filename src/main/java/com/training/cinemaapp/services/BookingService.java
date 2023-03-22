@@ -22,7 +22,7 @@ public class BookingService {
         return bookingRepository.findByScreeningId(screeningId);
     }
 
-    public List<Booking> getBookingsByUserId(long userId) {
+    public List<Booking> getBookingsByUserId(int userId) {
         return bookingRepository.findByUserId(userId);
     }
 
