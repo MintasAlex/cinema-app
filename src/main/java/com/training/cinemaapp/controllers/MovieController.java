@@ -13,17 +13,18 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/movies")
 public class MovieController {
 
     @Autowired
     private MovieService movieService;
 
-    @GetMapping("/movies")
+    @GetMapping("")
     public List<Movie> getMovies() {
         return movieService.getMovies();
     }
 
-    @GetMapping("/movies/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getMovieById(@PathVariable int id) {
         if(movieService.getMovieById(id).isPresent()) {
             return ResponseEntity.ok().body(movieService.getMovieById(id));
@@ -32,7 +33,7 @@ public class MovieController {
         }
     }
 
-    @PostMapping("/movies")
+    @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Movie> addMovie(@Valid @RequestBody Movie movie) {
         Movie newMovie = movieService.addMovie(movie);
@@ -44,7 +45,7 @@ public class MovieController {
         return ResponseEntity.created(location).body(newMovie);
     }
 
-    @PutMapping("/movies/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateMovie(@Valid @RequestBody Movie newMovie, @PathVariable int id) {
         if (movieService.updateMovie(newMovie, id).isPresent()) {
@@ -54,7 +55,7 @@ public class MovieController {
         }
     }
 
-    @DeleteMapping("/movies/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteMovie(@PathVariable int id) {
         if (movieService.deleteMovie(id)) {

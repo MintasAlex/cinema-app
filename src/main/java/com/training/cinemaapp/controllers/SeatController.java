@@ -13,22 +13,23 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/seats")
 public class SeatController {
 
     @Autowired
     private SeatService seatService;
 
-    @GetMapping("/seats")
+    @GetMapping("")
     public List<Seat> getSeats() {
         return seatService.getSeats();
     }
 
-    @GetMapping("/seats/cinemaHall/{cinemaHallId}")
+    @GetMapping("/cinemaHall/{cinemaHallId}")
     public List<Seat> getSeatsByCinemaHallId(@PathVariable int cinemaHallId) {
         return seatService.getSeatsByCinemaHallId(cinemaHallId);
     }
 
-    @GetMapping("/seats/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getSeatById(@PathVariable int id) {
         if (seatService.getSeatById(id).isPresent()) {
             return ResponseEntity.ok().body(seatService.getSeatById(id));
@@ -37,7 +38,7 @@ public class SeatController {
         }
     }
 
-    @PostMapping("/seats")
+    @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Seat> addSeat(@Valid @RequestBody Seat seat) {
         Seat newSeat = seatService.addSeat(seat);
@@ -49,7 +50,7 @@ public class SeatController {
         return ResponseEntity.created(location).body(newSeat);
     }
 
-    @PutMapping("/seats/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateSeat(@Valid @RequestBody Seat newSeat, @PathVariable int id) {
         if (seatService.updateSeat(newSeat, id).isPresent()) {
@@ -59,7 +60,7 @@ public class SeatController {
         }
     }
 
-    @DeleteMapping("/seats/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteSeat(@PathVariable int id) {
         if (seatService.deleteSeat(id)) {

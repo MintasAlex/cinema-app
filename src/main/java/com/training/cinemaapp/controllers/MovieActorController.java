@@ -13,22 +13,23 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/movie-actors")
 public class MovieActorController {
 
     @Autowired
     private MovieActorService movieActorService;
 
-    @GetMapping("/movie-actors")
+    @GetMapping("")
     public List<MovieActor> getMovieActors() {
         return movieActorService.getMovieActors();
     }
 
-    @GetMapping("/movie-actors/{movieId}")
+    @GetMapping("/{movieId}")
     public List<MovieActor> getMovieActorsByMovieId(@PathVariable int movieId) {
         return movieActorService.getMovieActorsByMovieId(movieId);
     }
 
-    @GetMapping("/movie-actors/{movieId}/{actorName}")
+    @GetMapping("/{movieId}/{actorName}")
     public ResponseEntity<?> getMovieActorByMovieIdAndActorName(@PathVariable int movieId, @PathVariable String actorName) {
         if (movieActorService.getMovieActorByMovieIdAndActorName(movieId, actorName).isPresent()) {
             return ResponseEntity.ok().body(movieActorService.getMovieActorByMovieIdAndActorName(movieId, actorName));
@@ -37,7 +38,7 @@ public class MovieActorController {
         }
     }
 
-    @PostMapping("/movie-actors")
+    @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MovieActor> addMovieActor(@RequestBody MovieActor movieActor) {
         MovieActor newMovieActor = movieActorService.addMovieActor(movieActor);
@@ -50,7 +51,7 @@ public class MovieActorController {
     }
 
 
-    @DeleteMapping("/movie-actors/{movieId}/{actorName}")
+    @DeleteMapping("/{movieId}/{actorName}")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<?> deleteMovieActor(@PathVariable int movieId, @PathVariable String actorName) {

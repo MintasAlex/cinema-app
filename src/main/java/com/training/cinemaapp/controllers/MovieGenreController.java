@@ -14,27 +14,28 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/movie-genres")
 public class MovieGenreController {
 
     @Autowired
     private MovieGenreService movieGenreService;
 
-    @GetMapping("/movie-genres")
+    @GetMapping("")
     public List<MovieGenre> getMovieGenres() {
         return movieGenreService.getMovieGenres();
     }
 
-    @GetMapping("/movie-genres/movie/{movieId}")
+    @GetMapping("/movie/{movieId}")
     public List<MovieGenre> getMovieGenresByMovieId(@PathVariable int movieId) {
         return movieGenreService.getMovieGenresByMovieId(movieId);
     }
 
-    @GetMapping("/movie-genres/genre/{genreName}")
+    @GetMapping("/genre/{genreName}")
     public List<MovieGenre> getMovieGenresByGenreName(@PathVariable String genreName) {
         return movieGenreService.getMovieGenresByGenreName(genreName);
     }
 
-    @GetMapping("/movie-genres/{movieId}/{genreName}")
+    @GetMapping("/{movieId}/{genreName}")
     public ResponseEntity<?> getMovieGenreByMovieIdAndGenreName(@PathVariable int movieId, @PathVariable String genreName) {
         if (movieGenreService.getMovieGenreByMovieIdAndGenreName(movieId, genreName).isPresent()) {
             return ResponseEntity.ok().body(movieGenreService.getMovieGenreByMovieIdAndGenreName(movieId, genreName));
@@ -43,7 +44,7 @@ public class MovieGenreController {
         }
     }
 
-    @PostMapping("/movie-genres")
+    @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MovieGenre> addMovieGenre(@Valid @RequestBody MovieGenre movieGenre) {
         MovieGenre newMovieGenre = movieGenreService.addMovieGenre(movieGenre);
@@ -55,7 +56,7 @@ public class MovieGenreController {
         return ResponseEntity.created(location).body(newMovieGenre);
     }
 
-    @DeleteMapping("/movie-genres/{movieId}/{genreName}")
+    @DeleteMapping("/{movieId}/{genreName}")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<?> deleteMovieGenre(@PathVariable int movieId, @PathVariable String genreName) {

@@ -14,24 +14,25 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/user-roles")
 public class UserRoleController {
 
     @Autowired
     private UserRoleService userRoleService;
 
-    @GetMapping("/user-roles")
+    @GetMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserRole> getUserRoles() {
         return userRoleService.getUserRoles();
     }
 
-    @GetMapping("/user-roles/{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
     public List<UserRole> getUserRolesByUserId(@PathVariable Long id) {
         return userRoleService.getUserRolesByUserId(id);
     }
 
-    @GetMapping("/user-roles/{userId}/{roleId}")
+    @GetMapping("/{userId}/{roleId}")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#userId)")
     public ResponseEntity<?> getUserRoleByUserIdAndRoleId(@PathVariable Long userId, @PathVariable int roleId) {
         if (userRoleService.getUserRoleByUserIdAndRoleId(userId, roleId).isPresent()) {
@@ -41,7 +42,7 @@ public class UserRoleController {
         }
     }
 
-    @PostMapping("/user-roles")
+    @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserRole> addUserRole(@Valid @RequestBody UserRole userRole) {
         UserRole newUserRole = userRoleService.addUserRole(userRole);
@@ -53,7 +54,7 @@ public class UserRoleController {
         return ResponseEntity.created(location).body(newUserRole);
     }
 
-    @DeleteMapping("/user-roles/{userId}/{roleId}")
+    @DeleteMapping("/{userId}/{roleId}")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<?> deleteUserRole(@PathVariable Long userId, @PathVariable int roleId) {

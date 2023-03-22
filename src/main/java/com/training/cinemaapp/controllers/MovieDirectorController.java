@@ -1,7 +1,6 @@
 package com.training.cinemaapp.controllers;
 
 import com.training.cinemaapp.models.MovieDirector;
-import com.training.cinemaapp.repositories.MovieDirectorRepository;
 import com.training.cinemaapp.services.MovieDirectorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,22 +13,23 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/movie-directors")
 public class MovieDirectorController {
 
     @Autowired
     private MovieDirectorService movieDirectorService;
 
-    @GetMapping("/movie-directors")
+    @GetMapping("")
     public List<MovieDirector> getMovieDirectors() {
         return movieDirectorService.getMovieDirectors();
     }
 
-    @GetMapping("/movie-directors/{movieId}")
+    @GetMapping("/{movieId}")
     public List<MovieDirector> getMovieDirectorByMovieId(@PathVariable int movieId) {
         return movieDirectorService.getMovieDirectorByMovieId(movieId);
     }
 
-    @GetMapping("/movie-directors/{movieId}/{directorName}")
+    @GetMapping("/{movieId}/{directorName}")
     public ResponseEntity<?> getMovieDirectorByMovieIdAndDirectorName(@PathVariable int movieId, @PathVariable String directorName) {
         if (movieDirectorService.getMovieDirectorByMovieIdAndDirectorName(movieId, directorName).isPresent()) {
             return ResponseEntity.ok().body(movieDirectorService.getMovieDirectorByMovieIdAndDirectorName(movieId, directorName));
@@ -38,7 +38,7 @@ public class MovieDirectorController {
         }
     }
 
-    @PostMapping("/movie-directors")
+    @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MovieDirector> addMovieDirector(@RequestBody MovieDirector movieDirector) {
         MovieDirector newMovieDirector = movieDirectorService.addMovieDirector(movieDirector);
@@ -50,7 +50,7 @@ public class MovieDirectorController {
         return ResponseEntity.created(location).body(newMovieDirector);
     }
 
-    @DeleteMapping("/movie-directors/{movieId}/{directorName}")
+    @DeleteMapping("/{movieId}/{directorName}")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<?> deleteMovieDirector(@PathVariable int movieId, @PathVariable String directorName) {

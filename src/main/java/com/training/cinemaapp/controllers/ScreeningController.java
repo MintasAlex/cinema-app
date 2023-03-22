@@ -13,27 +13,28 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/screenings")
 public class ScreeningController {
 
     @Autowired
     private ScreeningService screeningService;
 
-    @GetMapping("/screenings")
+    @GetMapping("")
     public List<Screening> getScreenings() {
         return screeningService.getScreenings();
     }
 
-    @GetMapping("/screenings/movie/{movieId}")
+    @GetMapping("/movie/{movieId}")
     public List<Screening> getScreeningByMovieId(@PathVariable int movieId) {
         return screeningService.getScreeningByMovieId(movieId);
     }
 
-    @GetMapping("/screenings/cinemaHall/{cinemaHallId}")
+    @GetMapping("/cinemaHall/{cinemaHallId}")
     public List<Screening> getScreeningByCinemaHallId(@PathVariable int cinemaHallId) {
         return screeningService.getScreeningByCinemaHallId(cinemaHallId);
     }
 
-    @GetMapping("/screenings/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getScreeningById(@PathVariable int id) {
         if (screeningService.getScreeningById(id).isPresent()) {
             return ResponseEntity.ok().body(screeningService.getScreeningById(id));
@@ -42,7 +43,7 @@ public class ScreeningController {
         }
     }
 
-    @PostMapping("/screenings")
+    @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Screening> addScreening(@Valid @RequestBody Screening screening) {
         Screening newScreening = screeningService.addScreening(screening);
@@ -54,7 +55,7 @@ public class ScreeningController {
         return ResponseEntity.created(location).body(newScreening);
     }
 
-    @PutMapping("/screenings/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateScreening(@Valid @RequestBody Screening newScreening, @PathVariable int id) {
         if (screeningService.updateScreening(newScreening, id).isPresent()) {
@@ -64,7 +65,7 @@ public class ScreeningController {
         }
     }
 
-    @DeleteMapping("/screenings/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteScreening(@PathVariable int id) {
         if (screeningService.deleteScreening(id)) {

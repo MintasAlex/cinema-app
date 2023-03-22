@@ -13,17 +13,18 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/cinema-halls")
 public class CinemaHallController {
 
     @Autowired
     private CinemaHallService cinemaHallService;
 
-    @GetMapping("/cinema-halls")
+    @GetMapping("")
     public List<CinemaHall> getCinemaHalls() {
         return cinemaHallService.getCinemaHalls();
     }
 
-    @GetMapping("/cinema-halls/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getCinemaHallById(@PathVariable Integer id) {
         if (cinemaHallService.getCinemaHallById(id).isPresent()) {
             return ResponseEntity.ok().body(cinemaHallService.getCinemaHallById(id));
@@ -33,7 +34,7 @@ public class CinemaHallController {
 
     }
 
-    @PostMapping("/cinema-halls")
+    @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CinemaHall> addCinemaHall(@Valid @RequestBody CinemaHall cinemaHall) {
         CinemaHall newCinemaHall = cinemaHallService.addCinemaHall(cinemaHall);
@@ -45,7 +46,7 @@ public class CinemaHallController {
         return ResponseEntity.created(location).body(newCinemaHall);
     }
 
-    @PutMapping("/cinema-halls/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateCinemaHall(@Valid @RequestBody CinemaHall newCinemaHall, @PathVariable Integer id) {
         if (cinemaHallService.updateCinemaHall(newCinemaHall, id).isPresent()) {
@@ -55,7 +56,7 @@ public class CinemaHallController {
         }
     }
 
-    @DeleteMapping("/cinema-halls/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCinemaHall(@PathVariable Integer id) {
         if (cinemaHallService.deleteCinemaHall(id)) {

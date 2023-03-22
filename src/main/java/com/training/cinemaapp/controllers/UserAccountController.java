@@ -11,18 +11,19 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequestMapping("/users")
 public class UserAccountController {
 
     @Autowired
     private UserAccountService userAccountService;
 
-    @GetMapping("/users")
+    @GetMapping("")
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserAccount> getUserAccounts() {
         return userAccountService.getUserAccounts();
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
     public ResponseEntity<?> getUserAccountById(@PathVariable int id) {
         if (userAccountService.getUserAccountById(id).isPresent()) {
@@ -32,7 +33,7 @@ public class UserAccountController {
         }
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(#id)")
     public ResponseEntity<?> updateUserAccount(@Valid @RequestBody UserAccount newUserAccount, @PathVariable int id) {
         if (userAccountService.updateUserAccount(newUserAccount, id).isPresent()) {
@@ -42,7 +43,7 @@ public class UserAccountController {
         }
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteUserAccount(@PathVariable int id) {
         if (userAccountService.deleteUserAccount(id)) {

@@ -15,6 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/bookings")
 public class BookingController {
 
     @Autowired
@@ -23,23 +24,22 @@ public class BookingController {
     @Autowired
     private UserSecurity userSecurity;
 
-    @GetMapping("/bookings")
+    @GetMapping("")
     public List<Booking> getBookings() {
         return bookingService.getBookings();
     }
 
-    @GetMapping("/bookings/screening/{screeningId}")
+    @GetMapping("/screening/{screeningId}")
     public List<Booking> getBookingsByScreeningId(@PathVariable int screeningId) {
         return bookingService.getBookingsByScreeningId(screeningId);
     }
 
-    @GetMapping("/bookings/user/{userId}")
-//    @PreAuthorize("hasRole('ROLE_ADMIN') or @userSecurity.isUserBookingAuthor(authentication.principal.id, #userId)")
+    @GetMapping("/user/{userId}")
     public List<Booking> getBookingsByUserId(@PathVariable int userId) {
         return bookingService.getBookingsByUserId(userId);
     }
 
-    @GetMapping("/bookings/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getBookingById(@PathVariable int id) {
         if (bookingService.getBookingById(id).isPresent()) {
             return ResponseEntity.ok().body(bookingService.getBookingById(id));
@@ -48,7 +48,7 @@ public class BookingController {
         }
     }
 
-    @PostMapping("/bookings")
+    @PostMapping("")
     public ResponseEntity<Booking> addBooking(@Valid @RequestBody Booking booking) {
         //check if user is admin or is booking for himself
         if (userSecurity.isUserBookingForHimself(booking.getUserId())) {
@@ -60,11 +60,11 @@ public class BookingController {
                     .toUri();
             return ResponseEntity.created(location).body(newBooking);
         } else {
-            return ResponseEntity.status(403).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
-    @PutMapping("/bookings/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateBooking(@Valid @RequestBody Booking newBooking, @PathVariable int id) {
         if (bookingService.updateBooking(newBooking, id).isPresent()) {
@@ -74,8 +74,7 @@ public class BookingController {
         }
     }
 
-    @DeleteMapping("/bookings/{id}")
-//    @PreAuthorize("hasRole('ROLE_ADMIN') or @userSecurity.isUserBookingAuthor(authentication.principal.id, #id)")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBooking(@PathVariable int id) {
         if (userSecurity.isUserBookingAuthor(id)) {
             if (bookingService.deleteBooking(id)) {
